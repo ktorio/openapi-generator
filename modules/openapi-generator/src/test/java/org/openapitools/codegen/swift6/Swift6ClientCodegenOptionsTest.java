@@ -46,7 +46,6 @@ public class Swift6ClientCodegenOptionsTest extends AbstractOptionsTest {
         verify(clientCodegen)
                 .setNonPublicApi(Boolean.parseBoolean(Swift6ClientCodegenOptionsProvider.NON_PUBLIC_API_REQUIRED_VALUE));
         verify(clientCodegen).setObjcCompatible(Boolean.parseBoolean(Swift6ClientCodegenOptionsProvider.OBJC_COMPATIBLE_VALUE));
-        verify(clientCodegen).setLenientTypeCast(Boolean.parseBoolean(Swift6ClientCodegenOptionsProvider.LENIENT_TYPE_CAST_VALUE));
         verify(clientCodegen).setPrependFormOrBodyParameters(
                 Boolean.valueOf(Swift6ClientCodegenOptionsProvider.PREPEND_FORM_OR_BODY_PARAMETERS_VALUE));
         verify(clientCodegen)
@@ -54,6 +53,7 @@ public class Swift6ClientCodegenOptionsTest extends AbstractOptionsTest {
         verify(clientCodegen).setGenerateModelAdditionalProperties(
                 Boolean.parseBoolean(Swift6ClientCodegenOptionsProvider.GENERATE_MODEL_ADDITIONAL_PROPERTIES_VALUE));
         verify(clientCodegen).setHashableModels(Boolean.parseBoolean(Swift6ClientCodegenOptionsProvider.HASHABLE_MODELS_VALUE));
+        verify(clientCodegen).setIdentifiableModels(Boolean.parseBoolean(Swift6ClientCodegenOptionsProvider.IDENTIFIABLE_MODELS_VALUE));
         verify(clientCodegen)
                 .setEnumUnknownDefaultCase(Boolean.parseBoolean(Swift6ClientCodegenOptionsProvider.ENUM_UNKNOWN_DEFAULT_CASE_VALUE));
         verify(clientCodegen).setApiStaticMethod(Boolean.parseBoolean(Swift6ClientCodegenOptionsProvider.API_STATIC_METHOD_VALUE));

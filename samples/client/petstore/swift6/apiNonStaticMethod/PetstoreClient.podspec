@@ -10,9 +10,9 @@ Pod::Spec.new do |s|
   s.license = 'Proprietary'
   s.homepage = 'https://github.com/openapitools/openapi-generator'
   s.summary = 'PetstoreClient'
-  s.source_files = 'PetstoreClient/Classes/**/*.swift'
-  s.dependency 'AnyCodable-FlightSchool', '~> 0.6'
-  s.dependency 'Alamofire', '~> 5.9'
+  s.source_files = 'Sources/PetstoreClient/**/*.swift'
+  # TODO: Alamofire versions 5.10.0 and above are not currently supported. If you need a newer version, please consider submitting a Pull Request with the required changes.
+  s.dependency 'Alamofire', '5.9.1'
   s.dependency 'PromiseKit/CorePromise', '~> 8.1'
-  s.dependency 'RxSwift', '~> 6.7'
+  s.dependency 'RxSwift', '~> 6.8'
 end

@@ -6,13 +6,10 @@
 //
 
 import Foundation
-#if canImport(AnyCodable)
-import AnyCodable
-#endif
 
-internal struct Order: Codable, JSONEncodable {
+internal struct Order: Sendable, Codable, JSONEncodable {
 
-    internal enum Status: String, Codable, CaseIterable, CaseIterableDefaultsLast {
+    internal enum Status: String, Sendable, Codable, CaseIterable, CaseIterableDefaultsLast {
         case placed = "placed"
         case approved = "approved"
         case delivered = "delivered"
@@ -57,3 +54,6 @@ internal struct Order: Codable, JSONEncodable {
     }
 }
 
+
+@available(iOS 13, tvOS 13, watchOS 6, macOS 10.15, *)
+extension Order: Identifiable {}

@@ -6,14 +6,11 @@
 //
 
 import Foundation
-#if canImport(AnyCodable)
-import AnyCodable
-#endif
 import Vapor
 
 public final class Order: Content, Hashable {
 
-    public enum Status: String, Content, Hashable, CaseIterable {
+    public enum Status: String, Sendable, Content, Hashable, CaseIterable {
         case placed = "placed"
         case approved = "approved"
         case delivered = "delivered"
@@ -77,3 +74,6 @@ public final class Order: Content, Hashable {
     }
 }
 
+
+@available(iOS 13, tvOS 13, watchOS 6, macOS 10.15, *)
+extension Order: Identifiable {}

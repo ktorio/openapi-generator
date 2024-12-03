@@ -6,11 +6,8 @@
 //
 
 import Foundation
-#if canImport(AnyCodable)
-import AnyCodable
-#endif
 
-internal struct StringBooleanMap: Codable, JSONEncodable {
+internal struct StringBooleanMap: Sendable, Codable, JSONEncodable {
 
 
     internal enum CodingKeys: CodingKey, CaseIterable {

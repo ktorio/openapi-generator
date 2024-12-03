@@ -6,18 +6,15 @@
 //
 
 import Foundation
-#if canImport(AnyCodable)
-import AnyCodable
-#endif
 
 @available(*, deprecated, renamed: "PetstoreClientAPI.Client")
 public typealias Client = PetstoreClientAPI.Client
 
 extension PetstoreClientAPI {
 
-public final class Client: Codable, JSONEncodable, Hashable {
+public final class Client: @unchecked Sendable, Codable, JSONEncodable, Hashable {
 
-    public var client: String?
+    public private(set) var client: String?
 
     public init(client: String? = nil) {
         self.client = client

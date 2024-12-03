@@ -6,11 +6,8 @@
 //
 
 import Foundation
-#if canImport(AnyCodable)
-import AnyCodable
-#endif
 
-public struct AdditionalPropertiesClass: Codable, JSONEncodable, Hashable {
+public struct AdditionalPropertiesClass: Sendable, Codable, JSONEncodable, Hashable {
 
     public var mapString: [String: String]?
     public var mapMapString: [String: [String: String]]?

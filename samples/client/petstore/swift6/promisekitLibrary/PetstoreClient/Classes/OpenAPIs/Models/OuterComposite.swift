@@ -6,11 +6,8 @@
 //
 
 import Foundation
-#if canImport(AnyCodable)
-import AnyCodable
-#endif
 
-public struct OuterComposite: Codable, JSONEncodable, Hashable {
+public struct OuterComposite: Sendable, Codable, JSONEncodable, Hashable {
 
     public var myNumber: Double?
     public var myString: String?

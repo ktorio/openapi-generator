@@ -6,11 +6,8 @@
 //
 
 import Foundation
-#if canImport(AnyCodable)
-import AnyCodable
-#endif
 
-public struct FileSchemaTestClass: Codable, JSONEncodable, Hashable {
+public struct FileSchemaTestClass: Sendable, Codable, JSONEncodable, Hashable {
 
     public var file: File?
     public var files: [File]?

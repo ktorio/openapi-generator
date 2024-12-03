@@ -6,11 +6,8 @@
 //
 
 import Foundation
-#if canImport(AnyCodable)
-import AnyCodable
-#endif
 
-internal struct MixedPropertiesAndAdditionalPropertiesClass: Codable, JSONEncodable {
+internal struct MixedPropertiesAndAdditionalPropertiesClass: Sendable, Codable, JSONEncodable {
 
     internal private(set) var uuid: UUID?
     internal private(set) var dateTime: Date?

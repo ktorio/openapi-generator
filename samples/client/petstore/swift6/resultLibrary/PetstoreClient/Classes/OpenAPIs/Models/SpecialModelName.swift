@@ -6,11 +6,8 @@
 //
 
 import Foundation
-#if canImport(AnyCodable)
-import AnyCodable
-#endif
 
-internal struct SpecialModelName: Codable, JSONEncodable {
+internal struct SpecialModelName: Sendable, Codable, JSONEncodable {
 
     internal private(set) var specialPropertyName: Int64?
 

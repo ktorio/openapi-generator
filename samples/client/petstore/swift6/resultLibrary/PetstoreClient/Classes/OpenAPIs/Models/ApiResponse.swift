@@ -6,11 +6,8 @@
 //
 
 import Foundation
-#if canImport(AnyCodable)
-import AnyCodable
-#endif
 
-internal struct ApiResponse: Codable, JSONEncodable {
+internal struct ApiResponse: Sendable, Codable, JSONEncodable {
 
     internal private(set) var code: Int?
     internal private(set) var type: String?

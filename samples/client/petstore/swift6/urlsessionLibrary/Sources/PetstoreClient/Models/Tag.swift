@@ -6,19 +6,16 @@
 //
 
 import Foundation
-#if canImport(AnyCodable)
-import AnyCodable
-#endif
 
 @available(*, deprecated, renamed: "PetstoreClientAPI.Tag")
 public typealias Tag = PetstoreClientAPI.Tag
 
 extension PetstoreClientAPI {
 
-public final class Tag: Codable, JSONEncodable, Hashable {
+public final class Tag: @unchecked Sendable, Codable, JSONEncodable, Hashable {
 
-    public var id: Int64?
-    public var name: String?
+    public private(set) var id: Int64?
+    public private(set) var name: String?
 
     public init(id: Int64? = nil, name: String? = nil) {
         self.id = id
@@ -52,3 +49,6 @@ public final class Tag: Codable, JSONEncodable, Hashable {
 }
 
 }
+
+@available(iOS 13, tvOS 13, watchOS 6, macOS 10.15, *)
+extension PetstoreClientAPI.Tag: Identifiable {}

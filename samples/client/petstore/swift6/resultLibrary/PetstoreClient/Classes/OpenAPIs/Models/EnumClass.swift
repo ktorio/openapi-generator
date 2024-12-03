@@ -6,11 +6,8 @@
 //
 
 import Foundation
-#if canImport(AnyCodable)
-import AnyCodable
-#endif
 
-internal enum EnumClass: String, Codable, CaseIterable, CaseIterableDefaultsLast {
+internal enum EnumClass: String, Sendable, Codable, CaseIterable, CaseIterableDefaultsLast {
     case abc = "_abc"
     case efg = "-efg"
     case xyz = "(xyz)"

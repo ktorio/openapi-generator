@@ -6,21 +6,18 @@
 //
 
 import Foundation
-#if canImport(AnyCodable)
-import AnyCodable
-#endif
 
 internal class FakeAPI {
 
     /**
 
      - parameter body: (body) Input boolean as post body (optional)
-     - parameter apiResponseQueue: The queue on which api response is dispatched.
+     - parameter apiConfiguration: The configuration for the http request.
      - parameter completion: completion handler to receive the result
      */
     @discardableResult
-    internal class func fakeOuterBooleanSerialize(body: Bool? = nil, apiResponseQueue: DispatchQueue = PetstoreClientAPI.shared.apiResponseQueue, completion: @Sendable @escaping (_ result: Swift.Result<Bool, ErrorResponse>) -> Void) -> RequestTask {
-        return fakeOuterBooleanSerializeWithRequestBuilder(body: body).execute(apiResponseQueue) { result in
+    internal class func fakeOuterBooleanSerialize(body: Bool? = nil, apiConfiguration: PetstoreClientAPIConfiguration = PetstoreClientAPIConfiguration.shared, completion: @Sendable @escaping (_ result: Swift.Result<Bool, ErrorResponse>) -> Void) -> RequestTask {
+        return fakeOuterBooleanSerializeWithRequestBuilder(body: body, apiConfiguration: apiConfiguration).execute { result in
             switch result {
             case let .success(response):
                 completion(.success(response.body))
@@ -34,12 +31,13 @@ internal class FakeAPI {
      - POST /fake/outer/boolean
      - Test serialization of outer boolean types
      - parameter body: (body) Input boolean as post body (optional)
+     - parameter apiConfiguration: The configuration for the http request.
      - returns: RequestBuilder<Bool> 
      */
-    internal class func fakeOuterBooleanSerializeWithRequestBuilder(body: Bool? = nil) -> RequestBuilder<Bool> {
+    internal class func fakeOuterBooleanSerializeWithRequestBuilder(body: Bool? = nil, apiConfiguration: PetstoreClientAPIConfiguration = PetstoreClientAPIConfiguration.shared) -> RequestBuilder<Bool> {
         let localVariablePath = "/fake/outer/boolean"
-        let localVariableURLString = PetstoreClientAPI.shared.basePath + localVariablePath
-        let localVariableParameters = JSONEncodingHelper.encodingParameters(forEncodableObject: body)
+        let localVariableURLString = apiConfiguration.basePath + localVariablePath
+        let localVariableParameters = JSONEncodingHelper.encodingParameters(forEncodableObject: body, codableHelper: apiConfiguration.codableHelper)
 
         let localVariableUrlComponents = URLComponents(string: localVariableURLString)
 
@@ -49,20 +47,20 @@ internal class FakeAPI {
 
         let localVariableHeaderParameters = APIHelper.rejectNilHeaders(localVariableNillableHeaders)
 
-        let localVariableRequestBuilder: RequestBuilder<Bool>.Type = PetstoreClientAPI.shared.requestBuilderFactory.getBuilder()
+        let localVariableRequestBuilder: RequestBuilder<Bool>.Type = apiConfiguration.requestBuilderFactory.getBuilder()
 
-        return localVariableRequestBuilder.init(method: "POST", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: false)
+        return localVariableRequestBuilder.init(method: "POST", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: false, apiConfiguration: apiConfiguration)
     }
 
     /**
 
      - parameter body: (body) Input composite as post body (optional)
-     - parameter apiResponseQueue: The queue on which api response is dispatched.
+     - parameter apiConfiguration: The configuration for the http request.
      - parameter completion: completion handler to receive the result
      */
     @discardableResult
-    internal class func fakeOuterCompositeSerialize(body: OuterComposite? = nil, apiResponseQueue: DispatchQueue = PetstoreClientAPI.shared.apiResponseQueue, completion: @Sendable @escaping (_ result: Swift.Result<OuterComposite, ErrorResponse>) -> Void) -> RequestTask {
-        return fakeOuterCompositeSerializeWithRequestBuilder(body: body).execute(apiResponseQueue) { result in
+    internal class func fakeOuterCompositeSerialize(body: OuterComposite? = nil, apiConfiguration: PetstoreClientAPIConfiguration = PetstoreClientAPIConfiguration.shared, completion: @Sendable @escaping (_ result: Swift.Result<OuterComposite, ErrorResponse>) -> Void) -> RequestTask {
+        return fakeOuterCompositeSerializeWithRequestBuilder(body: body, apiConfiguration: apiConfiguration).execute { result in
             switch result {
             case let .success(response):
                 completion(.success(response.body))
@@ -76,12 +74,13 @@ internal class FakeAPI {
      - POST /fake/outer/composite
      - Test serialization of object with outer number type
      - parameter body: (body) Input composite as post body (optional)
+     - parameter apiConfiguration: The configuration for the http request.
      - returns: RequestBuilder<OuterComposite> 
      */
-    internal class func fakeOuterCompositeSerializeWithRequestBuilder(body: OuterComposite? = nil) -> RequestBuilder<OuterComposite> {
+    internal class func fakeOuterCompositeSerializeWithRequestBuilder(body: OuterComposite? = nil, apiConfiguration: PetstoreClientAPIConfiguration = PetstoreClientAPIConfiguration.shared) -> RequestBuilder<OuterComposite> {
         let localVariablePath = "/fake/outer/composite"
-        let localVariableURLString = PetstoreClientAPI.shared.basePath + localVariablePath
-        let localVariableParameters = JSONEncodingHelper.encodingParameters(forEncodableObject: body)
+        let localVariableURLString = apiConfiguration.basePath + localVariablePath
+        let localVariableParameters = JSONEncodingHelper.encodingParameters(forEncodableObject: body, codableHelper: apiConfiguration.codableHelper)
 
         let localVariableUrlComponents = URLComponents(string: localVariableURLString)
 
@@ -91,20 +90,20 @@ internal class FakeAPI {
 
         let localVariableHeaderParameters = APIHelper.rejectNilHeaders(localVariableNillableHeaders)
 
-        let localVariableRequestBuilder: RequestBuilder<OuterComposite>.Type = PetstoreClientAPI.shared.requestBuilderFactory.getBuilder()
+        let localVariableRequestBuilder: RequestBuilder<OuterComposite>.Type = apiConfiguration.requestBuilderFactory.getBuilder()
 
-        return localVariableRequestBuilder.init(method: "POST", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: false)
+        return localVariableRequestBuilder.init(method: "POST", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: false, apiConfiguration: apiConfiguration)
     }
 
     /**
 
      - parameter body: (body) Input number as post body (optional)
-     - parameter apiResponseQueue: The queue on which api response is dispatched.
+     - parameter apiConfiguration: The configuration for the http request.
      - parameter completion: completion handler to receive the result
      */
     @discardableResult
-    internal class func fakeOuterNumberSerialize(body: Double? = nil, apiResponseQueue: DispatchQueue = PetstoreClientAPI.shared.apiResponseQueue, completion: @Sendable @escaping (_ result: Swift.Result<Double, ErrorResponse>) -> Void) -> RequestTask {
-        return fakeOuterNumberSerializeWithRequestBuilder(body: body).execute(apiResponseQueue) { result in
+    internal class func fakeOuterNumberSerialize(body: Double? = nil, apiConfiguration: PetstoreClientAPIConfiguration = PetstoreClientAPIConfiguration.shared, completion: @Sendable @escaping (_ result: Swift.Result<Double, ErrorResponse>) -> Void) -> RequestTask {
+        return fakeOuterNumberSerializeWithRequestBuilder(body: body, apiConfiguration: apiConfiguration).execute { result in
             switch result {
             case let .success(response):
                 completion(.success(response.body))
@@ -118,12 +117,13 @@ internal class FakeAPI {
      - POST /fake/outer/number
      - Test serialization of outer number types
      - parameter body: (body) Input number as post body (optional)
+     - parameter apiConfiguration: The configuration for the http request.
      - returns: RequestBuilder<Double> 
      */
-    internal class func fakeOuterNumberSerializeWithRequestBuilder(body: Double? = nil) -> RequestBuilder<Double> {
+    internal class func fakeOuterNumberSerializeWithRequestBuilder(body: Double? = nil, apiConfiguration: PetstoreClientAPIConfiguration = PetstoreClientAPIConfiguration.shared) -> RequestBuilder<Double> {
         let localVariablePath = "/fake/outer/number"
-        let localVariableURLString = PetstoreClientAPI.shared.basePath + localVariablePath
-        let localVariableParameters = JSONEncodingHelper.encodingParameters(forEncodableObject: body)
+        let localVariableURLString = apiConfiguration.basePath + localVariablePath
+        let localVariableParameters = JSONEncodingHelper.encodingParameters(forEncodableObject: body, codableHelper: apiConfiguration.codableHelper)
 
         let localVariableUrlComponents = URLComponents(string: localVariableURLString)
 
@@ -133,20 +133,20 @@ internal class FakeAPI {
 
         let localVariableHeaderParameters = APIHelper.rejectNilHeaders(localVariableNillableHeaders)
 
-        let localVariableRequestBuilder: RequestBuilder<Double>.Type = PetstoreClientAPI.shared.requestBuilderFactory.getBuilder()
+        let localVariableRequestBuilder: RequestBuilder<Double>.Type = apiConfiguration.requestBuilderFactory.getBuilder()
 
-        return localVariableRequestBuilder.init(method: "POST", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: false)
+        return localVariableRequestBuilder.init(method: "POST", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: false, apiConfiguration: apiConfiguration)
     }
 
     /**
 
      - parameter body: (body) Input string as post body (optional)
-     - parameter apiResponseQueue: The queue on which api response is dispatched.
+     - parameter apiConfiguration: The configuration for the http request.
      - parameter completion: completion handler to receive the result
      */
     @discardableResult
-    internal class func fakeOuterStringSerialize(body: String? = nil, apiResponseQueue: DispatchQueue = PetstoreClientAPI.shared.apiResponseQueue, completion: @Sendable @escaping (_ result: Swift.Result<String, ErrorResponse>) -> Void) -> RequestTask {
-        return fakeOuterStringSerializeWithRequestBuilder(body: body).execute(apiResponseQueue) { result in
+    internal class func fakeOuterStringSerialize(body: String? = nil, apiConfiguration: PetstoreClientAPIConfiguration = PetstoreClientAPIConfiguration.shared, completion: @Sendable @escaping (_ result: Swift.Result<String, ErrorResponse>) -> Void) -> RequestTask {
+        return fakeOuterStringSerializeWithRequestBuilder(body: body, apiConfiguration: apiConfiguration).execute { result in
             switch result {
             case let .success(response):
                 completion(.success(response.body))
@@ -160,12 +160,13 @@ internal class FakeAPI {
      - POST /fake/outer/string
      - Test serialization of outer string types
      - parameter body: (body) Input string as post body (optional)
+     - parameter apiConfiguration: The configuration for the http request.
      - returns: RequestBuilder<String> 
      */
-    internal class func fakeOuterStringSerializeWithRequestBuilder(body: String? = nil) -> RequestBuilder<String> {
+    internal class func fakeOuterStringSerializeWithRequestBuilder(body: String? = nil, apiConfiguration: PetstoreClientAPIConfiguration = PetstoreClientAPIConfiguration.shared) -> RequestBuilder<String> {
         let localVariablePath = "/fake/outer/string"
-        let localVariableURLString = PetstoreClientAPI.shared.basePath + localVariablePath
-        let localVariableParameters = JSONEncodingHelper.encodingParameters(forEncodableObject: body)
+        let localVariableURLString = apiConfiguration.basePath + localVariablePath
+        let localVariableParameters = JSONEncodingHelper.encodingParameters(forEncodableObject: body, codableHelper: apiConfiguration.codableHelper)
 
         let localVariableUrlComponents = URLComponents(string: localVariableURLString)
 
@@ -175,20 +176,20 @@ internal class FakeAPI {
 
         let localVariableHeaderParameters = APIHelper.rejectNilHeaders(localVariableNillableHeaders)
 
-        let localVariableRequestBuilder: RequestBuilder<String>.Type = PetstoreClientAPI.shared.requestBuilderFactory.getBuilder()
+        let localVariableRequestBuilder: RequestBuilder<String>.Type = apiConfiguration.requestBuilderFactory.getBuilder()
 
-        return localVariableRequestBuilder.init(method: "POST", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: false)
+        return localVariableRequestBuilder.init(method: "POST", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: false, apiConfiguration: apiConfiguration)
     }
 
     /**
 
      - parameter body: (body)  
-     - parameter apiResponseQueue: The queue on which api response is dispatched.
+     - parameter apiConfiguration: The configuration for the http request.
      - parameter completion: completion handler to receive the result
      */
     @discardableResult
-    internal class func testBodyWithFileSchema(body: FileSchemaTestClass, apiResponseQueue: DispatchQueue = PetstoreClientAPI.shared.apiResponseQueue, completion: @Sendable @escaping (_ result: Swift.Result<Void, ErrorResponse>) -> Void) -> RequestTask {
-        return testBodyWithFileSchemaWithRequestBuilder(body: body).execute(apiResponseQueue) { result in
+    internal class func testBodyWithFileSchema(body: FileSchemaTestClass, apiConfiguration: PetstoreClientAPIConfiguration = PetstoreClientAPIConfiguration.shared, completion: @Sendable @escaping (_ result: Swift.Result<Void, ErrorResponse>) -> Void) -> RequestTask {
+        return testBodyWithFileSchemaWithRequestBuilder(body: body, apiConfiguration: apiConfiguration).execute { result in
             switch result {
             case .success:
                 completion(.success(()))
@@ -202,12 +203,13 @@ internal class FakeAPI {
      - PUT /fake/body-with-file-schema
      - For this test, the body for this request much reference a schema named `File`.
      - parameter body: (body)  
+     - parameter apiConfiguration: The configuration for the http request.
      - returns: RequestBuilder<Void> 
      */
-    internal class func testBodyWithFileSchemaWithRequestBuilder(body: FileSchemaTestClass) -> RequestBuilder<Void> {
+    internal class func testBodyWithFileSchemaWithRequestBuilder(body: FileSchemaTestClass, apiConfiguration: PetstoreClientAPIConfiguration = PetstoreClientAPIConfiguration.shared) -> RequestBuilder<Void> {
         let localVariablePath = "/fake/body-with-file-schema"
-        let localVariableURLString = PetstoreClientAPI.shared.basePath + localVariablePath
-        let localVariableParameters = JSONEncodingHelper.encodingParameters(forEncodableObject: body)
+        let localVariableURLString = apiConfiguration.basePath + localVariablePath
+        let localVariableParameters = JSONEncodingHelper.encodingParameters(forEncodableObject: body, codableHelper: apiConfiguration.codableHelper)
 
         let localVariableUrlComponents = URLComponents(string: localVariableURLString)
 
@@ -217,21 +219,21 @@ internal class FakeAPI {
 
         let localVariableHeaderParameters = APIHelper.rejectNilHeaders(localVariableNillableHeaders)
 
-        let localVariableRequestBuilder: RequestBuilder<Void>.Type = PetstoreClientAPI.shared.requestBuilderFactory.getNonDecodableBuilder()
+        let localVariableRequestBuilder: RequestBuilder<Void>.Type = apiConfiguration.requestBuilderFactory.getNonDecodableBuilder()
 
-        return localVariableRequestBuilder.init(method: "PUT", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: false)
+        return localVariableRequestBuilder.init(method: "PUT", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: false, apiConfiguration: apiConfiguration)
     }
 
     /**
 
      - parameter query: (query)  
      - parameter body: (body)  
-     - parameter apiResponseQueue: The queue on which api response is dispatched.
+     - parameter apiConfiguration: The configuration for the http request.
      - parameter completion: completion handler to receive the result
      */
     @discardableResult
-    internal class func testBodyWithQueryParams(query: String, body: User, apiResponseQueue: DispatchQueue = PetstoreClientAPI.shared.apiResponseQueue, completion: @Sendable @escaping (_ result: Swift.Result<Void, ErrorResponse>) -> Void) -> RequestTask {
-        return testBodyWithQueryParamsWithRequestBuilder(query: query, body: body).execute(apiResponseQueue) { result in
+    internal class func testBodyWithQueryParams(query: String, body: User, apiConfiguration: PetstoreClientAPIConfiguration = PetstoreClientAPIConfiguration.shared, completion: @Sendable @escaping (_ result: Swift.Result<Void, ErrorResponse>) -> Void) -> RequestTask {
+        return testBodyWithQueryParamsWithRequestBuilder(query: query, body: body, apiConfiguration: apiConfiguration).execute { result in
             switch result {
             case .success:
                 completion(.success(()))
@@ -245,16 +247,17 @@ internal class FakeAPI {
      - PUT /fake/body-with-query-params
      - parameter query: (query)  
      - parameter body: (body)  
+     - parameter apiConfiguration: The configuration for the http request.
      - returns: RequestBuilder<Void> 
      */
-    internal class func testBodyWithQueryParamsWithRequestBuilder(query: String, body: User) -> RequestBuilder<Void> {
+    internal class func testBodyWithQueryParamsWithRequestBuilder(query: String, body: User, apiConfiguration: PetstoreClientAPIConfiguration = PetstoreClientAPIConfiguration.shared) -> RequestBuilder<Void> {
         let localVariablePath = "/fake/body-with-query-params"
-        let localVariableURLString = PetstoreClientAPI.shared.basePath + localVariablePath
-        let localVariableParameters = JSONEncodingHelper.encodingParameters(forEncodableObject: body)
+        let localVariableURLString = apiConfiguration.basePath + localVariablePath
+        let localVariableParameters = JSONEncodingHelper.encodingParameters(forEncodableObject: body, codableHelper: apiConfiguration.codableHelper)
 
         var localVariableUrlComponents = URLComponents(string: localVariableURLString)
         localVariableUrlComponents?.queryItems = APIHelper.mapValuesToQueryItems([
-            "query": (wrappedValue: query.encodeToJSON(), isExplode: false),
+            "query": (wrappedValue: query.encodeToJSON(codableHelper: apiConfiguration.codableHelper), isExplode: false),
         ])
 
         let localVariableNillableHeaders: [String: Any?] = [
@@ -263,21 +266,21 @@ internal class FakeAPI {
 
         let localVariableHeaderParameters = APIHelper.rejectNilHeaders(localVariableNillableHeaders)
 
-        let localVariableRequestBuilder: RequestBuilder<Void>.Type = PetstoreClientAPI.shared.requestBuilderFactory.getNonDecodableBuilder()
+        let localVariableRequestBuilder: RequestBuilder<Void>.Type = apiConfiguration.requestBuilderFactory.getNonDecodableBuilder()
 
-        return localVariableRequestBuilder.init(method: "PUT", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: false)
+        return localVariableRequestBuilder.init(method: "PUT", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: false, apiConfiguration: apiConfiguration)
     }
 
     /**
      To test \"client\" model
      
      - parameter body: (body) client model 
-     - parameter apiResponseQueue: The queue on which api response is dispatched.
+     - parameter apiConfiguration: The configuration for the http request.
      - parameter completion: completion handler to receive the result
      */
     @discardableResult
-    internal class func testClientModel(body: Client, apiResponseQueue: DispatchQueue = PetstoreClientAPI.shared.apiResponseQueue, completion: @Sendable @escaping (_ result: Swift.Result<Client, ErrorResponse>) -> Void) -> RequestTask {
-        return testClientModelWithRequestBuilder(body: body).execute(apiResponseQueue) { result in
+    internal class func testClientModel(body: Client, apiConfiguration: PetstoreClientAPIConfiguration = PetstoreClientAPIConfiguration.shared, completion: @Sendable @escaping (_ result: Swift.Result<Client, ErrorResponse>) -> Void) -> RequestTask {
+        return testClientModelWithRequestBuilder(body: body, apiConfiguration: apiConfiguration).execute { result in
             switch result {
             case let .success(response):
                 completion(.success(response.body))
@@ -292,12 +295,13 @@ internal class FakeAPI {
      - PATCH /fake
      - To test \"client\" model
      - parameter body: (body) client model 
+     - parameter apiConfiguration: The configuration for the http request.
      - returns: RequestBuilder<Client> 
      */
-    internal class func testClientModelWithRequestBuilder(body: Client) -> RequestBuilder<Client> {
+    internal class func testClientModelWithRequestBuilder(body: Client, apiConfiguration: PetstoreClientAPIConfiguration = PetstoreClientAPIConfiguration.shared) -> RequestBuilder<Client> {
         let localVariablePath = "/fake"
-        let localVariableURLString = PetstoreClientAPI.shared.basePath + localVariablePath
-        let localVariableParameters = JSONEncodingHelper.encodingParameters(forEncodableObject: body)
+        let localVariableURLString = apiConfiguration.basePath + localVariablePath
+        let localVariableParameters = JSONEncodingHelper.encodingParameters(forEncodableObject: body, codableHelper: apiConfiguration.codableHelper)
 
         let localVariableUrlComponents = URLComponents(string: localVariableURLString)
 
@@ -307,9 +311,9 @@ internal class FakeAPI {
 
         let localVariableHeaderParameters = APIHelper.rejectNilHeaders(localVariableNillableHeaders)
 
-        let localVariableRequestBuilder: RequestBuilder<Client>.Type = PetstoreClientAPI.shared.requestBuilderFactory.getBuilder()
+        let localVariableRequestBuilder: RequestBuilder<Client>.Type = apiConfiguration.requestBuilderFactory.getBuilder()
 
-        return localVariableRequestBuilder.init(method: "PATCH", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: false)
+        return localVariableRequestBuilder.init(method: "PATCH", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: false, apiConfiguration: apiConfiguration)
     }
 
     /**
@@ -329,12 +333,12 @@ internal class FakeAPI {
      - parameter dateTime: (form) None (optional)
      - parameter password: (form) None (optional)
      - parameter callback: (form) None (optional)
-     - parameter apiResponseQueue: The queue on which api response is dispatched.
+     - parameter apiConfiguration: The configuration for the http request.
      - parameter completion: completion handler to receive the result
      */
     @discardableResult
-    internal class func testEndpointParameters(integer: Int? = nil, int32: Int? = nil, int64: Int64? = nil, number: Double, float: Float? = nil, double: Double, string: String? = nil, patternWithoutDelimiter: String, byte: Data, binary: URL? = nil, date: Date? = nil, dateTime: Date? = nil, password: String? = nil, callback: String? = nil, apiResponseQueue: DispatchQueue = PetstoreClientAPI.shared.apiResponseQueue, completion: @Sendable @escaping (_ result: Swift.Result<Void, ErrorResponse>) -> Void) -> RequestTask {
-        return testEndpointParametersWithRequestBuilder(integer: integer, int32: int32, int64: int64, number: number, float: float, double: double, string: string, patternWithoutDelimiter: patternWithoutDelimiter, byte: byte, binary: binary, date: date, dateTime: dateTime, password: password, callback: callback).execute(apiResponseQueue) { result in
+    internal class func testEndpointParameters(integer: Int? = nil, int32: Int? = nil, int64: Int64? = nil, number: Double, float: Float? = nil, double: Double, string: String? = nil, patternWithoutDelimiter: String, byte: Data, binary: URL? = nil, date: Date? = nil, dateTime: Date? = nil, password: String? = nil, callback: String? = nil, apiConfiguration: PetstoreClientAPIConfiguration = PetstoreClientAPIConfiguration.shared, completion: @Sendable @escaping (_ result: Swift.Result<Void, ErrorResponse>) -> Void) -> RequestTask {
+        return testEndpointParametersWithRequestBuilder(integer: integer, int32: int32, int64: int64, number: number, float: float, double: double, string: string, patternWithoutDelimiter: patternWithoutDelimiter, byte: byte, binary: binary, date: date, dateTime: dateTime, password: password, callback: callback, apiConfiguration: apiConfiguration).execute { result in
             switch result {
             case .success:
                 completion(.success(()))
@@ -365,26 +369,27 @@ internal class FakeAPI {
      - parameter dateTime: (form) None (optional)
      - parameter password: (form) None (optional)
      - parameter callback: (form) None (optional)
+     - parameter apiConfiguration: The configuration for the http request.
      - returns: RequestBuilder<Void> 
      */
-    internal class func testEndpointParametersWithRequestBuilder(integer: Int? = nil, int32: Int? = nil, int64: Int64? = nil, number: Double, float: Float? = nil, double: Double, string: String? = nil, patternWithoutDelimiter: String, byte: Data, binary: URL? = nil, date: Date? = nil, dateTime: Date? = nil, password: String? = nil, callback: String? = nil) -> RequestBuilder<Void> {
+    internal class func testEndpointParametersWithRequestBuilder(integer: Int? = nil, int32: Int? = nil, int64: Int64? = nil, number: Double, float: Float? = nil, double: Double, string: String? = nil, patternWithoutDelimiter: String, byte: Data, binary: URL? = nil, date: Date? = nil, dateTime: Date? = nil, password: String? = nil, callback: String? = nil, apiConfiguration: PetstoreClientAPIConfiguration = PetstoreClientAPIConfiguration.shared) -> RequestBuilder<Void> {
         let localVariablePath = "/fake"
-        let localVariableURLString = PetstoreClientAPI.shared.basePath + localVariablePath
+        let localVariableURLString = apiConfiguration.basePath + localVariablePath
         let localVariableFormParams: [String: Any?] = [
-            "integer": integer?.encodeToJSON(),
-            "int32": int32?.encodeToJSON(),
-            "int64": int64?.encodeToJSON(),
-            "number": number.encodeToJSON(),
-            "float": float?.encodeToJSON(),
-            "double": double.encodeToJSON(),
-            "string": string?.encodeToJSON(),
-            "pattern_without_delimiter": patternWithoutDelimiter.encodeToJSON(),
-            "byte": byte.encodeToJSON(),
-            "binary": binary?.encodeToJSON(),
-            "date": date?.encodeToJSON(),
-            "dateTime": dateTime?.encodeToJSON(),
-            "password": password?.encodeToJSON(),
-            "callback": callback?.encodeToJSON(),
+            "integer": integer?.encodeToJSON(codableHelper: apiConfiguration.codableHelper),
+            "int32": int32?.encodeToJSON(codableHelper: apiConfiguration.codableHelper),
+            "int64": int64?.encodeToJSON(codableHelper: apiConfiguration.codableHelper),
+            "number": number.encodeToJSON(codableHelper: apiConfiguration.codableHelper),
+            "float": float?.encodeToJSON(codableHelper: apiConfiguration.codableHelper),
+            "double": double.encodeToJSON(codableHelper: apiConfiguration.codableHelper),
+            "string": string?.encodeToJSON(codableHelper: apiConfiguration.codableHelper),
+            "pattern_without_delimiter": patternWithoutDelimiter.encodeToJSON(codableHelper: apiConfiguration.codableHelper),
+            "byte": byte.encodeToJSON(codableHelper: apiConfiguration.codableHelper),
+            "binary": binary?.encodeToJSON(codableHelper: apiConfiguration.codableHelper),
+            "date": date?.encodeToJSON(codableHelper: apiConfiguration.codableHelper),
+            "dateTime": dateTime?.encodeToJSON(codableHelper: apiConfiguration.codableHelper),
+            "password": password?.encodeToJSON(codableHelper: apiConfiguration.codableHelper),
+            "callback": callback?.encodeToJSON(codableHelper: apiConfiguration.codableHelper),
         ]
 
         let localVariableNonNullParameters = APIHelper.rejectNil(localVariableFormParams)
@@ -398,15 +403,15 @@ internal class FakeAPI {
 
         let localVariableHeaderParameters = APIHelper.rejectNilHeaders(localVariableNillableHeaders)
 
-        let localVariableRequestBuilder: RequestBuilder<Void>.Type = PetstoreClientAPI.shared.requestBuilderFactory.getNonDecodableBuilder()
+        let localVariableRequestBuilder: RequestBuilder<Void>.Type = apiConfiguration.requestBuilderFactory.getNonDecodableBuilder()
 
-        return localVariableRequestBuilder.init(method: "POST", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: true)
+        return localVariableRequestBuilder.init(method: "POST", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: true, apiConfiguration: apiConfiguration)
     }
 
     /**
      * enum for parameter enumHeaderStringArray
      */
-    internal enum EnumHeaderStringArray_testEnumParameters: String, CaseIterable {
+    internal enum EnumHeaderStringArray_testEnumParameters: String, Sendable, CaseIterable {
         case greaterThan = ">"
         case dollar = "$"
     }
@@ -414,7 +419,7 @@ internal class FakeAPI {
     /**
      * enum for parameter enumHeaderString
      */
-    internal enum EnumHeaderString_testEnumParameters: String, CaseIterable {
+    internal enum EnumHeaderString_testEnumParameters: String, Sendable, CaseIterable {
         case abc = "_abc"
         case efg = "-efg"
         case xyz = "(xyz)"
@@ -423,7 +428,7 @@ internal class FakeAPI {
     /**
      * enum for parameter enumQueryStringArray
      */
-    internal enum EnumQueryStringArray_testEnumParameters: String, CaseIterable {
+    internal enum EnumQueryStringArray_testEnumParameters: String, Sendable, CaseIterable {
         case greaterThan = ">"
         case dollar = "$"
     }
@@ -431,7 +436,7 @@ internal class FakeAPI {
     /**
      * enum for parameter enumQueryString
      */
-    internal enum EnumQueryString_testEnumParameters: String, CaseIterable {
+    internal enum EnumQueryString_testEnumParameters: String, Sendable, CaseIterable {
         case abc = "_abc"
         case efg = "-efg"
         case xyz = "(xyz)"
@@ -440,7 +445,7 @@ internal class FakeAPI {
     /**
      * enum for parameter enumQueryInteger
      */
-    internal enum EnumQueryInteger_testEnumParameters: Int, CaseIterable {
+    internal enum EnumQueryInteger_testEnumParameters: Int, Sendable, CaseIterable {
         case _1 = 1
         case number2 = -2
     }
@@ -448,7 +453,7 @@ internal class FakeAPI {
     /**
      * enum for parameter enumQueryDouble
      */
-    internal enum EnumQueryDouble_testEnumParameters: Double, CaseIterable {
+    internal enum EnumQueryDouble_testEnumParameters: Double, Sendable, CaseIterable {
         case _11 = 1.1
         case number12 = -1.2
     }
@@ -456,7 +461,7 @@ internal class FakeAPI {
     /**
      * enum for parameter enumFormStringArray
      */
-    internal enum EnumFormStringArray_testEnumParameters: String, CaseIterable {
+    internal enum EnumFormStringArray_testEnumParameters: String, Sendable, CaseIterable {
         case greaterThan = ">"
         case dollar = "$"
     }
@@ -464,7 +469,7 @@ internal class FakeAPI {
     /**
      * enum for parameter enumFormString
      */
-    internal enum EnumFormString_testEnumParameters: String, CaseIterable {
+    internal enum EnumFormString_testEnumParameters: String, Sendable, CaseIterable {
         case abc = "_abc"
         case efg = "-efg"
         case xyz = "(xyz)"
@@ -481,12 +486,12 @@ internal class FakeAPI {
      - parameter enumQueryDouble: (query) Query parameter enum test (double) (optional)
      - parameter enumFormStringArray: (form) Form parameter enum test (string array) (optional, default to .dollar)
      - parameter enumFormString: (form) Form parameter enum test (string) (optional, default to .efg)
-     - parameter apiResponseQueue: The queue on which api response is dispatched.
+     - parameter apiConfiguration: The configuration for the http request.
      - parameter completion: completion handler to receive the result
      */
     @discardableResult
-    internal class func testEnumParameters(enumHeaderStringArray: [EnumHeaderStringArray_testEnumParameters]? = nil, enumHeaderString: EnumHeaderString_testEnumParameters? = nil, enumQueryStringArray: [EnumQueryStringArray_testEnumParameters]? = nil, enumQueryString: EnumQueryString_testEnumParameters? = nil, enumQueryInteger: EnumQueryInteger_testEnumParameters? = nil, enumQueryDouble: EnumQueryDouble_testEnumParameters? = nil, enumFormStringArray: [EnumFormStringArray_testEnumParameters]? = nil, enumFormString: EnumFormString_testEnumParameters? = nil, apiResponseQueue: DispatchQueue = PetstoreClientAPI.shared.apiResponseQueue, completion: @Sendable @escaping (_ result: Swift.Result<Void, ErrorResponse>) -> Void) -> RequestTask {
-        return testEnumParametersWithRequestBuilder(enumHeaderStringArray: enumHeaderStringArray, enumHeaderString: enumHeaderString, enumQueryStringArray: enumQueryStringArray, enumQueryString: enumQueryString, enumQueryInteger: enumQueryInteger, enumQueryDouble: enumQueryDouble, enumFormStringArray: enumFormStringArray, enumFormString: enumFormString).execute(apiResponseQueue) { result in
+    internal class func testEnumParameters(enumHeaderStringArray: [EnumHeaderStringArray_testEnumParameters]? = nil, enumHeaderString: EnumHeaderString_testEnumParameters? = nil, enumQueryStringArray: [EnumQueryStringArray_testEnumParameters]? = nil, enumQueryString: EnumQueryString_testEnumParameters? = nil, enumQueryInteger: EnumQueryInteger_testEnumParameters? = nil, enumQueryDouble: EnumQueryDouble_testEnumParameters? = nil, enumFormStringArray: [EnumFormStringArray_testEnumParameters]? = nil, enumFormString: EnumFormString_testEnumParameters? = nil, apiConfiguration: PetstoreClientAPIConfiguration = PetstoreClientAPIConfiguration.shared, completion: @Sendable @escaping (_ result: Swift.Result<Void, ErrorResponse>) -> Void) -> RequestTask {
+        return testEnumParametersWithRequestBuilder(enumHeaderStringArray: enumHeaderStringArray, enumHeaderString: enumHeaderString, enumQueryStringArray: enumQueryStringArray, enumQueryString: enumQueryString, enumQueryInteger: enumQueryInteger, enumQueryDouble: enumQueryDouble, enumFormStringArray: enumFormStringArray, enumFormString: enumFormString, apiConfiguration: apiConfiguration).execute { result in
             switch result {
             case .success:
                 completion(.success(()))
@@ -508,14 +513,15 @@ internal class FakeAPI {
      - parameter enumQueryDouble: (query) Query parameter enum test (double) (optional)
      - parameter enumFormStringArray: (form) Form parameter enum test (string array) (optional, default to .dollar)
      - parameter enumFormString: (form) Form parameter enum test (string) (optional, default to .efg)
+     - parameter apiConfiguration: The configuration for the http request.
      - returns: RequestBuilder<Void> 
      */
-    internal class func testEnumParametersWithRequestBuilder(enumHeaderStringArray: [EnumHeaderStringArray_testEnumParameters]? = nil, enumHeaderString: EnumHeaderString_testEnumParameters? = nil, enumQueryStringArray: [EnumQueryStringArray_testEnumParameters]? = nil, enumQueryString: EnumQueryString_testEnumParameters? = nil, enumQueryInteger: EnumQueryInteger_testEnumParameters? = nil, enumQueryDouble: EnumQueryDouble_testEnumParameters? = nil, enumFormStringArray: [EnumFormStringArray_testEnumParameters]? = nil, enumFormString: EnumFormString_testEnumParameters? = nil) -> RequestBuilder<Void> {
+    internal class func testEnumParametersWithRequestBuilder(enumHeaderStringArray: [EnumHeaderStringArray_testEnumParameters]? = nil, enumHeaderString: EnumHeaderString_testEnumParameters? = nil, enumQueryStringArray: [EnumQueryStringArray_testEnumParameters]? = nil, enumQueryString: EnumQueryString_testEnumParameters? = nil, enumQueryInteger: EnumQueryInteger_testEnumParameters? = nil, enumQueryDouble: EnumQueryDouble_testEnumParameters? = nil, enumFormStringArray: [EnumFormStringArray_testEnumParameters]? = nil, enumFormString: EnumFormString_testEnumParameters? = nil, apiConfiguration: PetstoreClientAPIConfiguration = PetstoreClientAPIConfiguration.shared) -> RequestBuilder<Void> {
         let localVariablePath = "/fake"
-        let localVariableURLString = PetstoreClientAPI.shared.basePath + localVariablePath
+        let localVariableURLString = apiConfiguration.basePath + localVariablePath
         let localVariableFormParams: [String: Any?] = [
-            "enum_form_string_array": enumFormStringArray?.encodeToJSON(),
-            "enum_form_string": enumFormString?.encodeToJSON(),
+            "enum_form_string_array": enumFormStringArray?.encodeToJSON(codableHelper: apiConfiguration.codableHelper),
+            "enum_form_string": enumFormString?.encodeToJSON(codableHelper: apiConfiguration.codableHelper),
         ]
 
         let localVariableNonNullParameters = APIHelper.rejectNil(localVariableFormParams)
@@ -523,23 +529,23 @@ internal class FakeAPI {
 
         var localVariableUrlComponents = URLComponents(string: localVariableURLString)
         localVariableUrlComponents?.queryItems = APIHelper.mapValuesToQueryItems([
-            "enum_query_string_array": (wrappedValue: enumQueryStringArray?.encodeToJSON(), isExplode: false),
-            "enum_query_string": (wrappedValue: enumQueryString?.encodeToJSON(), isExplode: false),
-            "enum_query_integer": (wrappedValue: enumQueryInteger?.encodeToJSON(), isExplode: false),
-            "enum_query_double": (wrappedValue: enumQueryDouble?.encodeToJSON(), isExplode: false),
+            "enum_query_string_array": (wrappedValue: enumQueryStringArray?.encodeToJSON(codableHelper: apiConfiguration.codableHelper), isExplode: false),
+            "enum_query_string": (wrappedValue: enumQueryString?.encodeToJSON(codableHelper: apiConfiguration.codableHelper), isExplode: false),
+            "enum_query_integer": (wrappedValue: enumQueryInteger?.encodeToJSON(codableHelper: apiConfiguration.codableHelper), isExplode: false),
+            "enum_query_double": (wrappedValue: enumQueryDouble?.encodeToJSON(codableHelper: apiConfiguration.codableHelper), isExplode: false),
         ])
 
         let localVariableNillableHeaders: [String: Any?] = [
             "Content-Type": "application/x-www-form-urlencoded",
-            "enum_header_string_array": enumHeaderStringArray?.encodeToJSON(),
-            "enum_header_string": enumHeaderString?.encodeToJSON(),
+            "enum_header_string_array": enumHeaderStringArray?.encodeToJSON(codableHelper: apiConfiguration.codableHelper),
+            "enum_header_string": enumHeaderString?.encodeToJSON(codableHelper: apiConfiguration.codableHelper),
         ]
 
         let localVariableHeaderParameters = APIHelper.rejectNilHeaders(localVariableNillableHeaders)
 
-        let localVariableRequestBuilder: RequestBuilder<Void>.Type = PetstoreClientAPI.shared.requestBuilderFactory.getNonDecodableBuilder()
+        let localVariableRequestBuilder: RequestBuilder<Void>.Type = apiConfiguration.requestBuilderFactory.getNonDecodableBuilder()
 
-        return localVariableRequestBuilder.init(method: "GET", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: false)
+        return localVariableRequestBuilder.init(method: "GET", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: false, apiConfiguration: apiConfiguration)
     }
 
     /**
@@ -551,12 +557,12 @@ internal class FakeAPI {
      - parameter stringGroup: (query) String in group parameters (optional)
      - parameter booleanGroup: (header) Boolean in group parameters (optional)
      - parameter int64Group: (query) Integer in group parameters (optional)
-     - parameter apiResponseQueue: The queue on which api response is dispatched.
+     - parameter apiConfiguration: The configuration for the http request.
      - parameter completion: completion handler to receive the result
      */
     @discardableResult
-    internal class func testGroupParameters(requiredStringGroup: Int, requiredBooleanGroup: Bool, requiredInt64Group: Int64, stringGroup: Int? = nil, booleanGroup: Bool? = nil, int64Group: Int64? = nil, apiResponseQueue: DispatchQueue = PetstoreClientAPI.shared.apiResponseQueue, completion: @Sendable @escaping (_ result: Swift.Result<Void, ErrorResponse>) -> Void) -> RequestTask {
-        return testGroupParametersWithRequestBuilder(requiredStringGroup: requiredStringGroup, requiredBooleanGroup: requiredBooleanGroup, requiredInt64Group: requiredInt64Group, stringGroup: stringGroup, booleanGroup: booleanGroup, int64Group: int64Group).execute(apiResponseQueue) { result in
+    internal class func testGroupParameters(requiredStringGroup: Int, requiredBooleanGroup: Bool, requiredInt64Group: Int64, stringGroup: Int? = nil, booleanGroup: Bool? = nil, int64Group: Int64? = nil, apiConfiguration: PetstoreClientAPIConfiguration = PetstoreClientAPIConfiguration.shared, completion: @Sendable @escaping (_ result: Swift.Result<Void, ErrorResponse>) -> Void) -> RequestTask {
+        return testGroupParametersWithRequestBuilder(requiredStringGroup: requiredStringGroup, requiredBooleanGroup: requiredBooleanGroup, requiredInt64Group: requiredInt64Group, stringGroup: stringGroup, booleanGroup: booleanGroup, int64Group: int64Group, apiConfiguration: apiConfiguration).execute { result in
             switch result {
             case .success:
                 completion(.success(()))
@@ -576,43 +582,44 @@ internal class FakeAPI {
      - parameter stringGroup: (query) String in group parameters (optional)
      - parameter booleanGroup: (header) Boolean in group parameters (optional)
      - parameter int64Group: (query) Integer in group parameters (optional)
+     - parameter apiConfiguration: The configuration for the http request.
      - returns: RequestBuilder<Void> 
      */
-    internal class func testGroupParametersWithRequestBuilder(requiredStringGroup: Int, requiredBooleanGroup: Bool, requiredInt64Group: Int64, stringGroup: Int? = nil, booleanGroup: Bool? = nil, int64Group: Int64? = nil) -> RequestBuilder<Void> {
+    internal class func testGroupParametersWithRequestBuilder(requiredStringGroup: Int, requiredBooleanGroup: Bool, requiredInt64Group: Int64, stringGroup: Int? = nil, booleanGroup: Bool? = nil, int64Group: Int64? = nil, apiConfiguration: PetstoreClientAPIConfiguration = PetstoreClientAPIConfiguration.shared) -> RequestBuilder<Void> {
         let localVariablePath = "/fake"
-        let localVariableURLString = PetstoreClientAPI.shared.basePath + localVariablePath
+        let localVariableURLString = apiConfiguration.basePath + localVariablePath
         let localVariableParameters: [String: Any]? = nil
 
         var localVariableUrlComponents = URLComponents(string: localVariableURLString)
         localVariableUrlComponents?.queryItems = APIHelper.mapValuesToQueryItems([
-            "required_string_group": (wrappedValue: requiredStringGroup.encodeToJSON(), isExplode: false),
-            "required_int64_group": (wrappedValue: requiredInt64Group.encodeToJSON(), isExplode: false),
-            "string_group": (wrappedValue: stringGroup?.encodeToJSON(), isExplode: false),
-            "int64_group": (wrappedValue: int64Group?.encodeToJSON(), isExplode: false),
+            "required_string_group": (wrappedValue: requiredStringGroup.encodeToJSON(codableHelper: apiConfiguration.codableHelper), isExplode: false),
+            "required_int64_group": (wrappedValue: requiredInt64Group.encodeToJSON(codableHelper: apiConfiguration.codableHelper), isExplode: false),
+            "string_group": (wrappedValue: stringGroup?.encodeToJSON(codableHelper: apiConfiguration.codableHelper), isExplode: false),
+            "int64_group": (wrappedValue: int64Group?.encodeToJSON(codableHelper: apiConfiguration.codableHelper), isExplode: false),
         ])
 
         let localVariableNillableHeaders: [String: Any?] = [
-            "required_boolean_group": requiredBooleanGroup.encodeToJSON(),
-            "boolean_group": booleanGroup?.encodeToJSON(),
+            "required_boolean_group": requiredBooleanGroup.encodeToJSON(codableHelper: apiConfiguration.codableHelper),
+            "boolean_group": booleanGroup?.encodeToJSON(codableHelper: apiConfiguration.codableHelper),
         ]
 
         let localVariableHeaderParameters = APIHelper.rejectNilHeaders(localVariableNillableHeaders)
 
-        let localVariableRequestBuilder: RequestBuilder<Void>.Type = PetstoreClientAPI.shared.requestBuilderFactory.getNonDecodableBuilder()
+        let localVariableRequestBuilder: RequestBuilder<Void>.Type = apiConfiguration.requestBuilderFactory.getNonDecodableBuilder()
 
-        return localVariableRequestBuilder.init(method: "DELETE", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: false)
+        return localVariableRequestBuilder.init(method: "DELETE", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: false, apiConfiguration: apiConfiguration)
     }
 
     /**
      test inline additionalProperties
      
      - parameter param: (body) request body 
-     - parameter apiResponseQueue: The queue on which api response is dispatched.
+     - parameter apiConfiguration: The configuration for the http request.
      - parameter completion: completion handler to receive the result
      */
     @discardableResult
-    internal class func testInlineAdditionalProperties(param: [String: String], apiResponseQueue: DispatchQueue = PetstoreClientAPI.shared.apiResponseQueue, completion: @Sendable @escaping (_ result: Swift.Result<Void, ErrorResponse>) -> Void) -> RequestTask {
-        return testInlineAdditionalPropertiesWithRequestBuilder(param: param).execute(apiResponseQueue) { result in
+    internal class func testInlineAdditionalProperties(param: [String: String], apiConfiguration: PetstoreClientAPIConfiguration = PetstoreClientAPIConfiguration.shared, completion: @Sendable @escaping (_ result: Swift.Result<Void, ErrorResponse>) -> Void) -> RequestTask {
+        return testInlineAdditionalPropertiesWithRequestBuilder(param: param, apiConfiguration: apiConfiguration).execute { result in
             switch result {
             case .success:
                 completion(.success(()))
@@ -626,12 +633,13 @@ internal class FakeAPI {
      test inline additionalProperties
      - POST /fake/inline-additionalProperties
      - parameter param: (body) request body 
+     - parameter apiConfiguration: The configuration for the http request.
      - returns: RequestBuilder<Void> 
      */
-    internal class func testInlineAdditionalPropertiesWithRequestBuilder(param: [String: String]) -> RequestBuilder<Void> {
+    internal class func testInlineAdditionalPropertiesWithRequestBuilder(param: [String: String], apiConfiguration: PetstoreClientAPIConfiguration = PetstoreClientAPIConfiguration.shared) -> RequestBuilder<Void> {
         let localVariablePath = "/fake/inline-additionalProperties"
-        let localVariableURLString = PetstoreClientAPI.shared.basePath + localVariablePath
-        let localVariableParameters = JSONEncodingHelper.encodingParameters(forEncodableObject: param)
+        let localVariableURLString = apiConfiguration.basePath + localVariablePath
+        let localVariableParameters = JSONEncodingHelper.encodingParameters(forEncodableObject: param, codableHelper: apiConfiguration.codableHelper)
 
         let localVariableUrlComponents = URLComponents(string: localVariableURLString)
 
@@ -641,9 +649,9 @@ internal class FakeAPI {
 
         let localVariableHeaderParameters = APIHelper.rejectNilHeaders(localVariableNillableHeaders)
 
-        let localVariableRequestBuilder: RequestBuilder<Void>.Type = PetstoreClientAPI.shared.requestBuilderFactory.getNonDecodableBuilder()
+        let localVariableRequestBuilder: RequestBuilder<Void>.Type = apiConfiguration.requestBuilderFactory.getNonDecodableBuilder()
 
-        return localVariableRequestBuilder.init(method: "POST", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: false)
+        return localVariableRequestBuilder.init(method: "POST", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: false, apiConfiguration: apiConfiguration)
     }
 
     /**
@@ -651,12 +659,12 @@ internal class FakeAPI {
      
      - parameter param: (form) field1 
      - parameter param2: (form) field2 
-     - parameter apiResponseQueue: The queue on which api response is dispatched.
+     - parameter apiConfiguration: The configuration for the http request.
      - parameter completion: completion handler to receive the result
      */
     @discardableResult
-    internal class func testJsonFormData(param: String, param2: String, apiResponseQueue: DispatchQueue = PetstoreClientAPI.shared.apiResponseQueue, completion: @Sendable @escaping (_ result: Swift.Result<Void, ErrorResponse>) -> Void) -> RequestTask {
-        return testJsonFormDataWithRequestBuilder(param: param, param2: param2).execute(apiResponseQueue) { result in
+    internal class func testJsonFormData(param: String, param2: String, apiConfiguration: PetstoreClientAPIConfiguration = PetstoreClientAPIConfiguration.shared, completion: @Sendable @escaping (_ result: Swift.Result<Void, ErrorResponse>) -> Void) -> RequestTask {
+        return testJsonFormDataWithRequestBuilder(param: param, param2: param2, apiConfiguration: apiConfiguration).execute { result in
             switch result {
             case .success:
                 completion(.success(()))
@@ -671,14 +679,15 @@ internal class FakeAPI {
      - GET /fake/jsonFormData
      - parameter param: (form) field1 
      - parameter param2: (form) field2 
+     - parameter apiConfiguration: The configuration for the http request.
      - returns: RequestBuilder<Void> 
      */
-    internal class func testJsonFormDataWithRequestBuilder(param: String, param2: String) -> RequestBuilder<Void> {
+    internal class func testJsonFormDataWithRequestBuilder(param: String, param2: String, apiConfiguration: PetstoreClientAPIConfiguration = PetstoreClientAPIConfiguration.shared) -> RequestBuilder<Void> {
         let localVariablePath = "/fake/jsonFormData"
-        let localVariableURLString = PetstoreClientAPI.shared.basePath + localVariablePath
+        let localVariableURLString = apiConfiguration.basePath + localVariablePath
         let localVariableFormParams: [String: Any?] = [
-            "param": param.encodeToJSON(),
-            "param2": param2.encodeToJSON(),
+            "param": param.encodeToJSON(codableHelper: apiConfiguration.codableHelper),
+            "param2": param2.encodeToJSON(codableHelper: apiConfiguration.codableHelper),
         ]
 
         let localVariableNonNullParameters = APIHelper.rejectNil(localVariableFormParams)
@@ -692,8 +701,8 @@ internal class FakeAPI {
 
         let localVariableHeaderParameters = APIHelper.rejectNilHeaders(localVariableNillableHeaders)
 
-        let localVariableRequestBuilder: RequestBuilder<Void>.Type = PetstoreClientAPI.shared.requestBuilderFactory.getNonDecodableBuilder()
+        let localVariableRequestBuilder: RequestBuilder<Void>.Type = apiConfiguration.requestBuilderFactory.getNonDecodableBuilder()
 
-        return localVariableRequestBuilder.init(method: "GET", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: false)
+        return localVariableRequestBuilder.init(method: "GET", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: false, apiConfiguration: apiConfiguration)
     }
 }

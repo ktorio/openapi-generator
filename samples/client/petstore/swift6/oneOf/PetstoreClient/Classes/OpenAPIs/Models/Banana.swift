@@ -6,11 +6,8 @@
 //
 
 import Foundation
-#if canImport(AnyCodable)
-import AnyCodable
-#endif
 
-public struct Banana: Codable, JSONEncodable, Hashable {
+public struct Banana: Sendable, Codable, JSONEncodable, Hashable {
 
     public var count: Double?
 

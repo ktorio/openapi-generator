@@ -6,12 +6,9 @@
 //
 
 import Foundation
-#if canImport(AnyCodable)
-import AnyCodable
-#endif
 
 /** Model for testing model name starting with number */
-internal struct Model200Response: Codable, JSONEncodable {
+internal struct Model200Response: Sendable, Codable, JSONEncodable {
 
     internal private(set) var name: Int?
     internal private(set) var _class: String?

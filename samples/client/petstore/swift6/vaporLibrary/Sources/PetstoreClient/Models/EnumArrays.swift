@@ -6,18 +6,15 @@
 //
 
 import Foundation
-#if canImport(AnyCodable)
-import AnyCodable
-#endif
 import Vapor
 
 public final class EnumArrays: Content, Hashable {
 
-    public enum JustSymbol: String, Content, Hashable, CaseIterable {
+    public enum JustSymbol: String, Sendable, Content, Hashable, CaseIterable {
         case greaterThanOrEqualTo = ">="
         case dollar = "$"
     }
-    public enum ArrayEnum: String, Content, Hashable, CaseIterable {
+    public enum ArrayEnum: String, Sendable, Content, Hashable, CaseIterable {
         case fish = "fish"
         case crab = "crab"
     }

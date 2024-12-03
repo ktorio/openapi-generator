@@ -6,18 +6,15 @@
 //
 
 import Foundation
-#if canImport(AnyCodable)
-import AnyCodable
-#endif
 
 @available(*, deprecated, renamed: "PetstoreClientAPI.ArrayOfArrayOfNumberOnly")
 public typealias ArrayOfArrayOfNumberOnly = PetstoreClientAPI.ArrayOfArrayOfNumberOnly
 
 extension PetstoreClientAPI {
 
-public final class ArrayOfArrayOfNumberOnly: Codable, JSONEncodable, Hashable {
+public final class ArrayOfArrayOfNumberOnly: @unchecked Sendable, Codable, JSONEncodable, Hashable {
 
-    public var arrayArrayNumber: [[Double]]?
+    public private(set) var arrayArrayNumber: [[Double]]?
 
     public init(arrayArrayNumber: [[Double]]? = nil) {
         self.arrayArrayNumber = arrayArrayNumber

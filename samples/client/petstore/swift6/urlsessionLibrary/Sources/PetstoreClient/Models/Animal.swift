@@ -6,19 +6,16 @@
 //
 
 import Foundation
-#if canImport(AnyCodable)
-import AnyCodable
-#endif
 
 @available(*, deprecated, renamed: "PetstoreClientAPI.Animal")
 public typealias Animal = PetstoreClientAPI.Animal
 
 extension PetstoreClientAPI {
 
-public final class Animal: Codable, JSONEncodable, Hashable {
+public final class Animal: @unchecked Sendable, Codable, JSONEncodable, Hashable {
 
-    public var className: String
-    public var color: String? = "red"
+    public private(set) var className: String
+    public private(set) var color: String? = "red"
 
     public init(className: String, color: String? = "red") {
         self.className = className

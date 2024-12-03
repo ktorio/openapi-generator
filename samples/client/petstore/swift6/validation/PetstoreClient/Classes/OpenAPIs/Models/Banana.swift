@@ -6,11 +6,8 @@
 //
 
 import Foundation
-#if canImport(AnyCodable)
-import AnyCodable
-#endif
 
-public struct Banana: Codable, JSONEncodable, Hashable {
+public struct Banana: Sendable, Codable, JSONEncodable, Hashable {
 
     static let countRule = NumericRule<Int>(minimum: 10, exclusiveMinimum: true, maximum: 100, exclusiveMaximum: true, multipleOf: 5)
     static let idsRule = ArrayRule(minItems: 1, maxItems: 10, uniqueItems: false)

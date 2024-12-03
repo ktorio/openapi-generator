@@ -6,13 +6,10 @@
 //
 
 import Foundation
-#if canImport(AnyCodable)
-import AnyCodable
-#endif
 
-internal struct MapTest: Codable, JSONEncodable {
+internal struct MapTest: Sendable, Codable, JSONEncodable {
 
-    internal enum MapOfEnumString: String, Codable, CaseIterable, CaseIterableDefaultsLast {
+    internal enum MapOfEnumString: String, Sendable, Codable, CaseIterable, CaseIterableDefaultsLast {
         case upper = "UPPER"
         case lower = "lower"
         case unknownDefaultOpenApi = "unknown_default_open_api"

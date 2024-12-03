@@ -6,11 +6,8 @@
 //
 
 import Foundation
-#if canImport(AnyCodable)
-import AnyCodable
-#endif
 
-internal struct Dog: Codable, JSONEncodable {
+internal struct Dog: Sendable, Codable, JSONEncodable {
 
     internal private(set) var className: String
     internal private(set) var color: String? = "red"

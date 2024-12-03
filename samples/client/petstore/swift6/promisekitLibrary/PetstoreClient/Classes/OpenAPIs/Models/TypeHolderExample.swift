@@ -6,11 +6,8 @@
 //
 
 import Foundation
-#if canImport(AnyCodable)
-import AnyCodable
-#endif
 
-public struct TypeHolderExample: Codable, JSONEncodable, Hashable {
+public struct TypeHolderExample: Sendable, Codable, JSONEncodable, Hashable {
 
     public var stringItem: String
     public var numberItem: Double

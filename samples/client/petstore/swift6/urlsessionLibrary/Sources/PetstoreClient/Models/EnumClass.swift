@@ -6,16 +6,13 @@
 //
 
 import Foundation
-#if canImport(AnyCodable)
-import AnyCodable
-#endif
 
 @available(*, deprecated, renamed: "PetstoreClientAPI.EnumClass")
 public typealias EnumClass = PetstoreClientAPI.EnumClass
 
 extension PetstoreClientAPI {
 
-public enum EnumClass: String, Codable, CaseIterable {
+public enum EnumClass: String, Sendable, Codable, CaseIterable {
     case abc = "_abc"
     case efg = "-efg"
     case xyz = "(xyz)"

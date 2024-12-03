@@ -6,11 +6,8 @@
 //
 
 import Foundation
-#if canImport(AnyCodable)
-import AnyCodable
-#endif
 
-internal struct TypeHolderExample: Codable, JSONEncodable {
+internal struct TypeHolderExample: Sendable, Codable, JSONEncodable {
 
     internal private(set) var stringItem: String
     internal private(set) var numberItem: Double

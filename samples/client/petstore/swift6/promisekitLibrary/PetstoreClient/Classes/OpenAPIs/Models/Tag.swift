@@ -6,11 +6,8 @@
 //
 
 import Foundation
-#if canImport(AnyCodable)
-import AnyCodable
-#endif
 
-public struct Tag: Codable, JSONEncodable, Hashable {
+public struct Tag: Sendable, Codable, JSONEncodable, Hashable {
 
     public var id: Int64?
     public var name: String?
@@ -34,3 +31,6 @@ public struct Tag: Codable, JSONEncodable, Hashable {
     }
 }
 
+
+@available(iOS 13, tvOS 13, watchOS 6, macOS 10.15, *)
+extension Tag: Identifiable {}

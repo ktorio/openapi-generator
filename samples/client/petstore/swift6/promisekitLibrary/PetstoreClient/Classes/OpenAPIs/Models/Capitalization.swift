@@ -6,11 +6,8 @@
 //
 
 import Foundation
-#if canImport(AnyCodable)
-import AnyCodable
-#endif
 
-public struct Capitalization: Codable, JSONEncodable, Hashable {
+public struct Capitalization: Sendable, Codable, JSONEncodable, Hashable {
 
     public var smallCamel: String?
     public var capitalCamel: String?

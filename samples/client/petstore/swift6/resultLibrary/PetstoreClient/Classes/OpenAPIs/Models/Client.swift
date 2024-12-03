@@ -6,11 +6,8 @@
 //
 
 import Foundation
-#if canImport(AnyCodable)
-import AnyCodable
-#endif
 
-internal struct Client: Codable, JSONEncodable {
+internal struct Client: Sendable, Codable, JSONEncodable {
 
     internal private(set) var client: String?
 

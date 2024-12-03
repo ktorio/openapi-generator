@@ -6,11 +6,8 @@
 //
 
 import Foundation
-#if canImport(AnyCodable)
-import AnyCodable
-#endif
 
-internal struct NumberOnly: Codable, JSONEncodable {
+internal struct NumberOnly: Sendable, Codable, JSONEncodable {
 
     internal private(set) var justNumber: Double?
 

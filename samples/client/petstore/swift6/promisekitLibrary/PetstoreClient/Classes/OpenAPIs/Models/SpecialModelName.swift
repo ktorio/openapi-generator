@@ -6,11 +6,8 @@
 //
 
 import Foundation
-#if canImport(AnyCodable)
-import AnyCodable
-#endif
 
-public struct SpecialModelName: Codable, JSONEncodable, Hashable {
+public struct SpecialModelName: Sendable, Codable, JSONEncodable, Hashable {
 
     public var specialPropertyName: Int64?
 

@@ -6,18 +6,15 @@
 //
 
 import Foundation
-#if canImport(AnyCodable)
-import AnyCodable
-#endif
 
-internal struct EnumArrays: Codable, JSONEncodable {
+internal struct EnumArrays: Sendable, Codable, JSONEncodable {
 
-    internal enum JustSymbol: String, Codable, CaseIterable, CaseIterableDefaultsLast {
+    internal enum JustSymbol: String, Sendable, Codable, CaseIterable, CaseIterableDefaultsLast {
         case greaterThanOrEqualTo = ">="
         case dollar = "$"
         case unknownDefaultOpenApi = "unknown_default_open_api"
     }
-    internal enum ArrayEnum: String, Codable, CaseIterable, CaseIterableDefaultsLast {
+    internal enum ArrayEnum: String, Sendable, Codable, CaseIterable, CaseIterableDefaultsLast {
         case fish = "fish"
         case crab = "crab"
         case unknownDefaultOpenApi = "unknown_default_open_api"

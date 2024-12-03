@@ -19,16 +19,16 @@ let package = Package(
     ],
     dependencies: [
         // Dependencies declare other packages that this package depends on.
-        .package(url: "https://github.com/Flight-School/AnyCodable", .upToNextMajor(from: "0.6.7")),
-        .package(url: "https://github.com/Alamofire/Alamofire", .upToNextMajor(from: "5.9.1")),
+        // TODO: Alamofire versions 5.10.0 and above are not currently supported. If you need a newer version, please consider submitting a Pull Request with the required changes.
+        .package(url: "https://github.com/Alamofire/Alamofire", exact: "5.9.1"),
     ],
     targets: [
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.
         // Targets can depend on other targets in this package, and on products in packages which this package depends on.
         .target(
             name: "PetstoreClient",
-            dependencies: ["AnyCodable", "Alamofire", ],
-            path: "PetstoreClient/Classes"
+            dependencies: ["Alamofire", ],
+            path: "Sources/PetstoreClient"
         ),
     ],
     swiftLanguageModes: [.v6]

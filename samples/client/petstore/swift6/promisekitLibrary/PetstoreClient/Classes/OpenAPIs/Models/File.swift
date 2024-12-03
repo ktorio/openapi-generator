@@ -6,12 +6,9 @@
 //
 
 import Foundation
-#if canImport(AnyCodable)
-import AnyCodable
-#endif
 
 /** Must be named &#x60;File&#x60; for test. */
-public struct File: Codable, JSONEncodable, Hashable {
+public struct File: Sendable, Codable, JSONEncodable, Hashable {
 
     /** Test capitalization */
     public var sourceURI: String?

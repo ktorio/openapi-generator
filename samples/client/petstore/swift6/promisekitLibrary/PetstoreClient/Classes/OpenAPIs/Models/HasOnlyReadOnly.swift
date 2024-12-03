@@ -6,11 +6,8 @@
 //
 
 import Foundation
-#if canImport(AnyCodable)
-import AnyCodable
-#endif
 
-public struct HasOnlyReadOnly: Codable, JSONEncodable, Hashable {
+public struct HasOnlyReadOnly: Sendable, Codable, JSONEncodable, Hashable {
 
     public var bar: String?
     public var foo: String?

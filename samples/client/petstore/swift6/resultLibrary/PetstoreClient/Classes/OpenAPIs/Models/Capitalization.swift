@@ -6,11 +6,8 @@
 //
 
 import Foundation
-#if canImport(AnyCodable)
-import AnyCodable
-#endif
 
-internal struct Capitalization: Codable, JSONEncodable {
+internal struct Capitalization: Sendable, Codable, JSONEncodable {
 
     internal private(set) var smallCamel: String?
     internal private(set) var capitalCamel: String?

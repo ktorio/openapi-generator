@@ -6,11 +6,8 @@
 //
 
 import Foundation
-#if canImport(AnyCodable)
-import AnyCodable
-#endif
 
-internal struct ArrayOfArrayOfNumberOnly: Codable, JSONEncodable {
+internal struct ArrayOfArrayOfNumberOnly: Sendable, Codable, JSONEncodable {
 
     internal private(set) var arrayArrayNumber: [[Double]]?
 

@@ -6,13 +6,10 @@
 //
 
 import Foundation
-#if canImport(AnyCodable)
-import AnyCodable
-#endif
 
-public struct MapTest: Codable, JSONEncodable, Hashable {
+public struct MapTest: Sendable, Codable, JSONEncodable, Hashable {
 
-    public enum MapOfEnumString: String, Codable, CaseIterable {
+    public enum MapOfEnumString: String, Sendable, Codable, CaseIterable {
         case upper = "UPPER"
         case lower = "lower"
     }

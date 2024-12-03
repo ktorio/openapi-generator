@@ -6,22 +6,19 @@
 //
 
 import Foundation
-#if canImport(AnyCodable)
-import AnyCodable
-#endif
 
 @available(*, deprecated, renamed: "PetstoreClientAPI.StringBooleanMap")
 public typealias StringBooleanMap = PetstoreClientAPI.StringBooleanMap
 
 extension PetstoreClientAPI {
 
-public final class StringBooleanMap: Codable, JSONEncodable, Hashable {
+public final class StringBooleanMap: @unchecked Sendable, Codable, JSONEncodable, Hashable {
 
 
     public enum CodingKeys: CodingKey, CaseIterable {
     }
 
-    public var additionalProperties: [String: Bool] = [:]
+    public private(set) var additionalProperties: [String: Bool] = [:]
 
     public subscript(key: String) -> Bool? {
         get {

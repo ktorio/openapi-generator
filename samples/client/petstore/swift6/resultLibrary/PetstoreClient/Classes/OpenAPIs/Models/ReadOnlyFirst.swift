@@ -6,11 +6,8 @@
 //
 
 import Foundation
-#if canImport(AnyCodable)
-import AnyCodable
-#endif
 
-internal struct ReadOnlyFirst: Codable, JSONEncodable {
+internal struct ReadOnlyFirst: Sendable, Codable, JSONEncodable {
 
     internal private(set) var bar: String?
     internal private(set) var baz: String?

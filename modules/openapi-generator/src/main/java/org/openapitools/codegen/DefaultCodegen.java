@@ -71,6 +71,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentSkipListSet;
@@ -1119,6 +1123,20 @@ public class DefaultCodegen implements CodegenConfig {
     }
 
     /**
+     * This method escapes text to be used in a single quoted string
+     * @param input the input string
+     * @return the escaped string
+     */
+    public String escapeTextInSingleQuotes(String input) {
+        if (input == null) {
+            return null;
+        }
+
+        return escapeText(input).replace("'", "\\'");
+    }
+
+
+    /**
      * Escape characters while allowing new lines
      *
      * @param input String to be escaped
@@ -1452,7 +1470,7 @@ public class DefaultCodegen implements CodegenConfig {
     }
 
     /**
-     * Return the file name of the Api Test
+     * Return the file name of the Api
      *
      * @param name the file name of the Api
      * @return the file name of the Api
@@ -3154,7 +3172,7 @@ public class DefaultCodegen implements CodegenConfig {
                 additionalPropertiesIsAnyType = true;
             }
         } else {
-            // if additioanl properties is set (e.g. free form object, any type, string, etc)
+            // if additional properties is set (e.g. free form object, any type, string, etc)
             addPropProp = fromProperty(getAdditionalPropertiesName(), (Schema) schema.getAdditionalProperties(), false);
             additionalPropertiesIsAnyType = true;
         }
@@ -3857,8 +3875,29 @@ public class DefaultCodegen implements CodegenConfig {
         }
 
         Schema original = null;
+        // process the dereference schema if it's a ref to allOf with a single item
+        // and certain field(s) (e.g. description, readyOnly, etc) is set
+        if (p.get$ref() != null) {
+            Schema derefSchema = ModelUtils.getReferencedSchema(openAPI, p);
+            if (ModelUtils.isAllOfWithSingleItem(derefSchema) && (
+                    derefSchema.getReadOnly() != null ||
+                            derefSchema.getWriteOnly() != null ||
+                            derefSchema.getDeprecated() != null ||
+                            derefSchema.getDescription() != null ||
+                            derefSchema.getMaxLength() != null ||
+                            derefSchema.getMinLength() != null ||
+                            derefSchema.getMinimum() != null ||
+                            derefSchema.getMaximum() != null ||
+                            derefSchema.getMaximum() != null ||
+                            derefSchema.getMinItems() != null ||
+                            derefSchema.getTitle() != null
+                    )) {
+                p = ModelUtils.getReferencedSchema(openAPI, p);
+            }
+        }
+
         // check if it's allOf (only 1 sub schema) with or without default/nullable/etc set in the top level
-        if (ModelUtils.isAllOf(p) && p.getAllOf().size() == 1) {
+        if (ModelUtils.isAllOfWithSingleItem(p)) {
             if (p.getAllOf().get(0) instanceof Schema) {
                 original = p;
                 p = (Schema) p.getAllOf().get(0);
@@ -4284,7 +4323,7 @@ public class DefaultCodegen implements CodegenConfig {
 
         if (baseItem != null) {
             // set both datatype and datetypeWithEnum as only the inner type is enum
-            property.datatypeWithEnum = property.datatypeWithEnum.replace(", " + baseItem.baseType, ", " + toEnumName(baseItem));
+            property.datatypeWithEnum = property.datatypeWithEnum.replace(baseItem.baseType + ">", toEnumName(baseItem) + ">");
 
             // naming the enum with respect to the language enum naming convention
             // e.g. remove [], {} from array/map of enum
@@ -4327,7 +4366,7 @@ public class DefaultCodegen implements CodegenConfig {
         if (code == null) {
             return null;
         }
-        return responses.get(code);
+        return ModelUtils.getReferencedApiResponse(openAPI, responses.get(code));
     }
 
     /**
@@ -4359,7 +4398,8 @@ public class DefaultCodegen implements CodegenConfig {
                                         CodegenOperation op,
                                         ApiResponse methodResponse,
                                         Map<String, String> schemaMappings) {
-        Schema responseSchema = unaliasSchema(ModelUtils.getSchemaFromResponse(openAPI, methodResponse));
+        ApiResponse response = ModelUtils.getReferencedApiResponse(openAPI, methodResponse);
+        Schema responseSchema = unaliasSchema(ModelUtils.getSchemaFromResponse(openAPI, response));
 
         if (responseSchema != null) {
             CodegenProperty cm = fromProperty("response", responseSchema, false);
@@ -4412,7 +4452,7 @@ public class DefaultCodegen implements CodegenConfig {
             }
             op.returnProperty = cm;
         }
-        addHeaders(methodResponse, op.responseHeaders);
+        addHeaders(response, op.responseHeaders);
     }
 
     /**
@@ -4478,7 +4518,7 @@ public class DefaultCodegen implements CodegenConfig {
             ApiResponse methodResponse = findMethodResponse(operation.getResponses());
             for (Map.Entry<String, ApiResponse> operationGetResponsesEntry : operation.getResponses().entrySet()) {
                 String key = operationGetResponsesEntry.getKey();
-                ApiResponse response = operationGetResponsesEntry.getValue();
+                ApiResponse response = ModelUtils.getReferencedApiResponse(openAPI, operationGetResponsesEntry.getValue());
                 addProducesInfo(response, op);
                 CodegenResponse r = fromResponse(key, response);
                 Map<String, Header> headers = response.getHeaders();
@@ -4548,9 +4588,10 @@ public class DefaultCodegen implements CodegenConfig {
             List<Map<String, String>> examples = new ArrayList<>();
 
             for (String statusCode : operation.getResponses().keySet()) {
-                ApiResponse apiResponse = operation.getResponses().get(statusCode);
+                ApiResponse apiResponse = ModelUtils.getReferencedApiResponse(openAPI, operation.getResponses().get(statusCode));
                 Schema schema = unaliasSchema(ModelUtils.getSchemaFromResponse(openAPI, apiResponse));
                 if (schema == null) {
+                    // void response
                     continue;
                 }
 
@@ -4747,7 +4788,7 @@ public class DefaultCodegen implements CodegenConfig {
         op.hasRequiredParams = op.requiredParams.size() > 0;
 
         // check if the operation has only a single parameter
-       op.hasSingleParam = op.allParams.size() == 1;
+        op.hasSingleParam = op.allParams.size() == 1;
 
         // set Restful Flag
         op.isRestfulShow = op.isRestfulShow();
@@ -5138,7 +5179,7 @@ public class DefaultCodegen implements CodegenConfig {
             parameterModelName = getParameterDataType(parameter, parameterSchema);
             CodegenProperty prop;
             if (this instanceof RustServerCodegen) {
-                // for rust server, we need to do somethings special as it uses
+                // for rust server, we need to do something special as it uses
                 // $ref (e.g. #components/schemas/Pet) to determine whether it's a model
                 prop = fromProperty(parameter.getName(), parameterSchema, false);
             } else if (getUseInlineModelResolver()) {
@@ -6076,29 +6117,67 @@ public class DefaultCodegen implements CodegenConfig {
         return result;
     }
 
+    /**
+     * Return a value that is unique, suffixed with _index to make it unique
+     * Ensures generated files are unique when compared case-insensitive
+     * Not all operating systems support case-sensitive paths
+     */
+    private String uniqueCaseInsensitiveString(String value, Map<String, String> seenValues) {
+        if (seenValues.keySet().contains(value)) {
+            return seenValues.get(value);
+        }
+
+        Optional<Entry<String, String>> foundEntry = seenValues.entrySet().stream().filter(v -> v.getValue().toLowerCase(Locale.ROOT).equals(value.toLowerCase(Locale.ROOT))).findAny();
+        if (foundEntry.isPresent()) {
+            int counter = 0;
+            String uniqueValue = value + "_" + counter;
+
+            while (seenValues.values().stream().map(v -> v.toLowerCase(Locale.ROOT)).collect(Collectors.toList()).contains(uniqueValue.toLowerCase(Locale.ROOT))) {
+                counter++;
+                uniqueValue = value + "_" + counter;
+            }
+
+            seenValues.put(value, uniqueValue);
+            return uniqueValue;
+        }
+
+        seenValues.put(value, value);
+        return value;
+    }
+
+    private final Map<String, String> seenApiFilenames = new HashMap<String, String>();
+
     @Override
     public String apiFilename(String templateName, String tag) {
+        String uniqueTag = uniqueCaseInsensitiveString(tag, seenApiFilenames);
         String suffix = apiTemplateFiles().get(templateName);
-        return apiFileFolder() + File.separator + toApiFilename(tag) + suffix;
+        return apiFileFolder() + File.separator + toApiFilename(uniqueTag) + suffix;
     }
 
     @Override
     public String apiFilename(String templateName, String tag, String outputDir) {
+        String uniqueTag = uniqueCaseInsensitiveString(tag, seenApiFilenames);
         String suffix = apiTemplateFiles().get(templateName);
-        return outputDir + File.separator + toApiFilename(tag) + suffix;
+        return outputDir + File.separator + toApiFilename(uniqueTag) + suffix;
     }
+
+    private final Map<String, String> seenModelFilenames = new HashMap<String, String>();
 
     @Override
     public String modelFilename(String templateName, String modelName) {
+        String uniqueModelName = uniqueCaseInsensitiveString(modelName, seenModelFilenames);
         String suffix = modelTemplateFiles().get(templateName);
-        return modelFileFolder() + File.separator + toModelFilename(modelName) + suffix;
+        return modelFileFolder() + File.separator + toModelFilename(uniqueModelName) + suffix;
     }
 
     @Override
     public String modelFilename(String templateName, String modelName, String outputDir) {
+        String uniqueModelName = uniqueCaseInsensitiveString(modelName, seenModelFilenames);
         String suffix = modelTemplateFiles().get(templateName);
-        return outputDir + File.separator + toModelFilename(modelName) + suffix;
+        return outputDir + File.separator + toModelFilename(uniqueModelName) + suffix;
     }
+
+    private final Map<String, String> seenApiDocFilenames = new HashMap<String, String>();
 
     /**
      * Return the full path and API documentation file
@@ -6109,10 +6188,13 @@ public class DefaultCodegen implements CodegenConfig {
      */
     @Override
     public String apiDocFilename(String templateName, String tag) {
+        String uniqueTag = uniqueCaseInsensitiveString(tag, seenApiDocFilenames);
         String docExtension = getDocExtension();
         String suffix = docExtension != null ? docExtension : apiDocTemplateFiles().get(templateName);
-        return apiDocFileFolder() + File.separator + toApiDocFilename(tag) + suffix;
+        return apiDocFileFolder() + File.separator + toApiDocFilename(uniqueTag) + suffix;
     }
+
+    private final Map<String, String> seenApiTestFilenames = new HashMap<String, String>();
 
     /**
      * Return the full path and API test file
@@ -6123,8 +6205,9 @@ public class DefaultCodegen implements CodegenConfig {
      */
     @Override
     public String apiTestFilename(String templateName, String tag) {
+        String uniqueTag = uniqueCaseInsensitiveString(tag, seenApiTestFilenames);
         String suffix = apiTestTemplateFiles().get(templateName);
-        return apiTestFileFolder() + File.separator + toApiTestFilename(tag) + suffix;
+        return apiTestFileFolder() + File.separator + toApiTestFilename(uniqueTag) + suffix;
     }
 
     @Override
@@ -6648,7 +6731,7 @@ public class DefaultCodegen implements CodegenConfig {
         for (Object value : values) {
             if (value == null) {
                 // raw null values in enums are unions for nullable
-                // atttributes, not actual enum values, so we remove them here
+                // attributes, not actual enum values, so we remove them here
                 continue;
             }
             Map<String, Object> enumVar = new HashMap<>();
@@ -8089,6 +8172,43 @@ public class DefaultCodegen implements CodegenConfig {
     }
 
     /**
+     * Executes an external command for file post processing.
+     *
+     * @param commandArr an array of commands and arguments. They will be concatenated with space and tokenized again.
+     * @return Whether the execution passed (true) or failed (false)
+     */
+    protected boolean executePostProcessor(String[] commandArr) {
+        final String command = String.join(" ", commandArr);
+        try {
+            // we don't use the array variant here, because the command passed in by the user is often not only a single binary
+            // but a combination of binary + parameters, e.g. `/etc/bin prettier -w`, which would then not be found, as the
+            // first array item would be expected to be the binary only. The exec method is tokenizing the command for us.
+            Process p = Runtime.getRuntime().exec(command);
+            p.waitFor();
+            int exitValue = p.exitValue();
+            if (exitValue != 0) {
+                try (InputStreamReader inputStreamReader = new InputStreamReader(p.getErrorStream(), StandardCharsets.UTF_8);
+                BufferedReader br = new BufferedReader(inputStreamReader)) {
+                    StringBuilder sb = new StringBuilder();
+                    String line;
+                    while ((line = br.readLine()) != null) {
+                        sb.append(line);
+                    }
+                    LOGGER.error("Error running the command ({}). Exit value: {}, Error output: {}", command, exitValue, sb);
+                }
+            } else {
+                LOGGER.info("Successfully executed: {}", command);
+                return true;
+            }
+        } catch (InterruptedException | IOException e) {
+            LOGGER.error("Error running the command ({}). Exception: {}", command, e.getMessage());
+            // Restore interrupted state
+            Thread.currentThread().interrupt();
+        }
+        return false;
+    }
+
+    /**
      * Boolean value indicating the state of the option for post-processing file using environment variables.
      *
      * @return true if the option is enabled
@@ -8354,6 +8474,7 @@ public class DefaultCodegen implements CodegenConfig {
         }
         List<CodegenProperty> xOf = new ArrayList<>();
         Set<String> dataTypeSet = new HashSet<>(); // to keep track of dataType
+        Set<String> dataTypeSetIgnoringErasure = new HashSet<>();
         int i = 0;
         for (Schema xOfSchema : xOfCollection) {
             CodegenProperty cp = fromProperty(collectionName + "_" + i, xOfSchema, false);
@@ -8362,7 +8483,7 @@ public class DefaultCodegen implements CodegenConfig {
 
             if (dataTypeSet.contains(cp.dataType)
                     || (isTypeErasedGenerics() && dataTypeSet.contains(cp.baseType))) {
-                // add "x-duplicated-data-type" to indicate if the dataType already occurs before
+                // add "x-duplicated-data-type" to indicate if the (base) dataType already occurs before
                 // in other sub-schemas of allOf/anyOf/oneOf
                 cp.vendorExtensions.putIfAbsent("x-duplicated-data-type", true);
             } else {
@@ -8371,6 +8492,13 @@ public class DefaultCodegen implements CodegenConfig {
                 } else {
                     dataTypeSet.add(cp.dataType);
                 }
+            }
+            if (dataTypeSetIgnoringErasure.contains(cp.dataType)) {
+                // add "x-duplicated-data-type-ignoring-erasure" to indicate if the dataType already occurs before
+                // in other sub-schemas of allOf/anyOf/oneOf
+                cp.vendorExtensions.putIfAbsent("x-duplicated-data-type-ignoring-erasure", true);
+            } else {
+                dataTypeSetIgnoringErasure.add(cp.dataType);
             }
         }
         return xOf;

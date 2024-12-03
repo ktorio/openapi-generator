@@ -6,11 +6,8 @@
 //
 
 import Foundation
-#if canImport(AnyCodable)
-import AnyCodable
-#endif
 
-internal struct List: Codable, JSONEncodable {
+internal struct List: Sendable, Codable, JSONEncodable {
 
     internal private(set) var _123list: String?
 
